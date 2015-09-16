@@ -7,18 +7,25 @@ import requests
 
 @click.group()
 def cli():
-    """U-Qasar CLI 0.1 version. 
-    This is a proof of concept about how can be implented a CLI tool
+    """U-Qasar CLI 0.1 version.
+
+    This is a proof of concept about how can be implented a CLI tool.
     """
     click.echo('U-Qasar CLI is working')
 
-    #Read & check the config
-        #Prepare URL
+# Read & check the config
+#  Prepare URL
 
 
 @cli.command('projects')
 def projects():
     """Retrieve all existing Projects in platform."""
+    click.echo('%s all you projects belong to us!!' % (project_name))
+
+
+@cli.command('project')
+def projects(project_name):
+    """Retrieve an existing Project in platform by name."""
     click.echo('all you projects belong to us!!')
 
 
