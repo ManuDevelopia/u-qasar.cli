@@ -1,0 +1,100 @@
+#!/usr/bin/env python
+""""U-QASAR Command Line Interpreter."""
+
+import click
+import requests
+
+from attrdict import AttrDict
+
+# U-Qasar server URL
+uq_server_url = "http://platform.uqasar.eu/uqasar/rest/api/"
+# HTTP Basic Authentication
+header_auth = {'Authorization': 'Basic XxxXXxxXXxxX=='}
+
+
+@click.group()
+def cli():
+    """U-Qasar CLI 0.0.1 version.
+
+    This is a proof of concept about how can be implented a CLI tool
+    to retrieve from U-Qasar information from Projects and QModels.
+    """
+
+#   Read & check the config
+#   Prepare URL
+#   Check the server is up
+#   Check credentiasl are ok
+
+
+@cli.command('projects')
+def projects():
+    """Retrieve all existing Projects in platform."""
+    projects = get_json(uq_server_url + "projects", header_auth)
+
+    for project in projects:
+        click.echo(project['name'] + " " + "{:.2f}".format(project['value']))
+        for objective in project['children']:
+            click.echo(' ' + objective['name'] + " " + "{:.2f}".format(objective['value']))
+            for indicator in objective['children']:
+                click.echo('  ' + indicator['name'] + " " + "{:.2f}".format(indicator['value']))
+                for metric in indicator['children']:
+                    click.echo('   ' + metric['name'] + " " + "{:.2f}".format(metric['value']))
+
+
+
+@cli.command('project')
+@click.argument('project_name', nargs=1, required=True)
+def projects(project_name):
+    """Retrieve an existing Project in platform by name."""
+    project = get_json(uq_server_url + "project/" + project_name, header_auth)
+
+
+@cli.command('qmodels')
+def qmodels():
+    """Retrieve all existing QModels in platform."""
+    qmodels = get_json(uq_server_url + "qmodels", header_auth)
+    click.echo(qmodels)
+
+
+@cli.command('measurements')
+def projects(adapter_id):
+    """Retrieve all measurements gathered from an Adapter."""
+    measure = get_json(uq_server_url + "measurements/" + adapter_id, header_auth)
+    click.echo(measure)
+
+
+@cli.command('qmodel')
+def projects(qmodel_name):
+    """Retrieve an existing Project in platform by name."""
+    qmodel = get_json(uq_server_url + "qmodels/" + qmodel_name, header_auth)
+    click.echo(qmodel)
+
+
+@cli.command('measurements')
+def projects(adapter_id):
+    """Retrieve all measurements gathered from an Adapter."""
+    measure = get_json(uq_server_url + "measurements/" + adapter_id, header_auth)
+    click.echo(measure)
+
+
+@cli.command('historic')
+def qmodels():
+    """Retrieve all existing Historic Values in platform."""
+    historic = get_json(uq_server_url + "historic", header_auth)
+    click.echo(historic)
+
+
+def get_json(url, header_auth):
+    """Make petition to the U-Qasar server."""
+    r = requests.get(url)
+
+    # The statuscode should be 200 if everything is ok
+    status_code = r.status_code
+
+    # Convert the response to JSON
+    r.headers['content-type']
+    r.encoding
+    return r.json()
+
+if __name__ == "__main__":
+    cli()
