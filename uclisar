@@ -41,10 +41,9 @@ def projects():
                     click.echo('   ' + metric['name'] + " " + "{:.2f}".format(metric['value']))
 
 
-
 @cli.command('project')
 @click.argument('project_name', nargs=1, required=True)
-def projects(project_name):
+def project(project_name):
     """Retrieve an existing Project in platform by name."""
     project = get_json(uq_server_url + "project/" + project_name, header_auth)
 
@@ -56,29 +55,22 @@ def qmodels():
     click.echo(qmodels)
 
 
-@cli.command('measurements')
-def projects(adapter_id):
-    """Retrieve all measurements gathered from an Adapter."""
-    measure = get_json(uq_server_url + "measurements/" + adapter_id, header_auth)
-    click.echo(measure)
-
-
 @cli.command('qmodel')
-def projects(qmodel_name):
+def qmodel(qmodel_name):
     """Retrieve an existing Project in platform by name."""
     qmodel = get_json(uq_server_url + "qmodels/" + qmodel_name, header_auth)
     click.echo(qmodel)
 
 
 @cli.command('measurements')
-def projects(adapter_id):
+def measure(adapter_id):
     """Retrieve all measurements gathered from an Adapter."""
     measure = get_json(uq_server_url + "measurements/" + adapter_id, header_auth)
     click.echo(measure)
 
 
 @cli.command('historic')
-def qmodels():
+def historic():
     """Retrieve all existing Historic Values in platform."""
     historic = get_json(uq_server_url + "historic", header_auth)
     click.echo(historic)
